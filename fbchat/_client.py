@@ -501,16 +501,16 @@ class Client:
         return [j["display_email"] for j in data["all_emails"]]
 
     def upload(
-        self, files: Iterable[Tuple[str, BinaryIO, str]], voice_clip: bool = False
+        self, file_tuple: Tuple[str, BinaryIO, str], voice_clip: bool = False
     ) -> Sequence[Tuple[str, str]]:
-        """Upload files to Facebook.
+        """Upload file to Facebook.
 
-        `files` should be a list of files that requests can upload, see
+        `file_tuple` should be a file tuple that requests can upload, see
         `requests.request <https://docs.python-requests.org/en/master/api/#requests.request>`_.
 
         Example:
             >>> with open("file.txt", "rb") as f:
-            ...     (file,) = client.upload([("file.txt", f, "text/plain")])
+            ...     (file,) = client.upload(("file.txt", f, "text/plain"))
             ...
             >>> file
             ("1234", "text/plain")
@@ -519,7 +519,7 @@ class Client:
             This result can be passed straight on to `ThreadABC.send_files`, or used in
             `Group.set_image`.
         """
-        file_dict = {"upload_{}".format(i): f for i, f in enumerate(files)}
+        file_dict = {"file": file_tuple}
 
         data = {"voice_clip": voice_clip}
 
